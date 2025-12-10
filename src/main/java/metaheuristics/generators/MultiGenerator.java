@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import factory_method.FactoryGenerator;
+import java.security.SecureRandom;
 
 import metaheurictics.strategy.Strategy;
 
@@ -18,6 +19,7 @@ public class MultiGenerator extends Generator {
 	public static List<State> listGeneratedPP = new ArrayList<State> ();
 	public static Generator activeGenerator;
 	public static List<State> listStateReference = new ArrayList<State>(); 
+	SecureRandom secureRandom = new SecureRandom();
 	
 	public void setGeneratortype(GeneratorType generatortype) {
 		Generatortype = generatortype;
@@ -284,7 +286,7 @@ public class MultiGenerator extends Generator {
 			limitRoulette.setGenerator(listGenerators[i]);
 			listLimit.add(limitRoulette);
 		}
-		float numbAleatory = (float) (Math.random() * (double)(1));
+		float numbAleatory = (float) (secureRandom.nextDouble() * (double)(1));
 		boolean find = false;
 		int i = 0;
 		while ((find == false) && (i < listLimit.size())){

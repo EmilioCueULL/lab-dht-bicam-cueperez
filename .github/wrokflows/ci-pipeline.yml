@@ -1,0 +1,50 @@
+name: CI Pipeline BICIAM
+
+# 1. Disparadores (Triggers) [cite: 16]
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-test-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      # Configuración del entorno
+      - name: Checkout del código
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Necesario para SonarCloud
+
+      - name: Configurar JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17' # Ajusta a la versión de tu proyecto
+          distribution: 'temurin'
+          cache: maven
+
+      # Etapa A: Build & Unit Test [cite: 18, 19, 20]
+      # Etapa B: Quality & Security Analysis (Plugins) [cite: 21, 23]
+      # Se ejecuta 'verify' para correr tests y plugins (SpotBugs, PMD, OWASP) configurados en el pom.xml
+      - name: Build, Test y Análisis Local
+        run: mvn clean verify
+        # Si el análisis de seguridad (OWASP/SpotBugs) falla en criticidad alta, el build fallará aquí 
+
+      # Etapa C: SonarCloud Scan [cite: 30, 31]
+      # Solo se ejecuta si los pasos anteriores fueron exitosos [cite: 32]
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # Nota: El Quality Gate debe estar configurado en SonarCloud para fallar si no cumple requisitos [cite: 33]
+
+      # 4. Generación de Artefacto [cite: 34]
+      # Solo si todo lo anterior es exitoso [cite: 35]
+      - name: Publicar Artefacto JAR
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: biciam-artifact
+          path: target/*.jar # Asegúrate que esta ruta coincide con tu generación
