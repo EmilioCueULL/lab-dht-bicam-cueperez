@@ -34,7 +34,7 @@ jobs:
       # Etapa C: SonarCloud Scan [cite: 30, 31]
       # Solo se ejecuta si los pasos anteriores fueron exitosos [cite: 32]
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
