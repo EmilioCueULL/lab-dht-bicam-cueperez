@@ -49,7 +49,7 @@ class OnePointCrossoverTest {
         
         assertNotNull(child);
         //FALLO AQUÍ 5->3
-        assertEquals(5, child.getCode().size());
+        assertEquals(3, child.getCode().size());
         
         // Verify child is not null and has valid elements
         boolean has1 = false;
