@@ -1,6 +1,5 @@
 name: CI Pipeline BICIAM
 
-# 1. Disparadores (Triggers) [cite: 16]
 on:
   push:
     branches: [ "main", "master" ]
@@ -11,12 +10,13 @@ jobs:
   build-test-analyze:
     runs-on: ubuntu-latest
     steps:
-      # Configuración del entorno
+      # 1. Checkout del código
       - name: Checkout del código
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Necesario para SonarCloud
 
+      # 2. Configurar JDK y cache de Maven
       - name: Configurar JDK
         uses: actions/setup-java@v3
         with:
@@ -24,27 +24,25 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Etapa A: Build & Unit Test [cite: 18, 19, 20]
-      # Etapa B: Quality & Security Analysis (Plugins) [cite: 21, 23]
-      # Se ejecuta 'verify' para correr tests y plugins (SpotBugs, PMD, OWASP) configurados en el pom.xml
+      # 3. Build, Unit Test y Análisis Local (SpotBugs, PMD, OWASP si están en el pom.xml)
       - name: Build, Test y Análisis Local
         run: mvn clean verify
-        # Si el análisis de seguridad (OWASP/SpotBugs) falla en criticidad alta, el build fallará aquí 
 
-      # Etapa C: SonarCloud Scan [cite: 30, 31]
-      # Solo se ejecuta si los pasos anteriores fueron exitosos [cite: 32]
+      # 4. SonarCloud Scan usando Maven
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2.1.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # Nota: El Quality Gate debe estar configurado en SonarCloud para fallar si no cumple requisitos [cite: 33]
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=EmilioCueULL_lab-dht-bicam-cueperez \
+            -Dsonar.organization=emiliocueull \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN}
 
-      # 4. Generación de Artefacto [cite: 34]
-      # Solo si todo lo anterior es exitoso [cite: 35]
+      # 5. Publicación del artefacto JAR
       - name: Publicar Artefacto JAR
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: biciam-artifact
-          path: target/*.jar # Asegúrate que esta ruta coincide con tu generación
+          path: target/*.jar
