@@ -13,7 +13,7 @@ public class InstanceGA implements Runnable {
 		try {
 			generatorGA = ifFactoryGenerator.createGenerator(GeneratorType.GeneticAlgorithm);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		boolean find = false;
 		int i = 0;

@@ -13,7 +13,7 @@ public class InstanceEE implements Runnable {
 			generatorEE = ifFactoryGenerator.createGenerator(GeneratorType.EvolutionStrategies);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		boolean find = false;
 		int i = 0;

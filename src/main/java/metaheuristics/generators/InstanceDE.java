@@ -13,7 +13,7 @@ public class InstanceDE implements Runnable {
 		try {
 			generatorDE = ifFactoryGenerator.createGenerator(GeneratorType.DistributionEstimationAlgorithm);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		boolean find = false;
 		int i = 0;

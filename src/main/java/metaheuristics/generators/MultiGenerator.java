@@ -132,7 +132,7 @@ public class MultiGenerator extends Generator {
 				stateCandidate.setTypeGenerator(generator.getType());
 				listGeneratedPP.add(stateCandidate);
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			} 
 			j++;
 		}
