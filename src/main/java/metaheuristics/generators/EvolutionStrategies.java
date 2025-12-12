@@ -20,6 +20,7 @@ import factory_interface.IFFactoryReplace;
 import factory_method.FactoryFatherSelection;
 import factory_method.FactoryMutation;
 import factory_method.FactoryReplace;
+import java.security.SecureRandom;
 
 public class EvolutionStrategies extends Generator {
 	
@@ -63,12 +64,13 @@ public class EvolutionStrategies extends Generator {
 	@Override
 	public State generate(Integer operatornumber) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException,	NoSuchMethodException {
 
+		SecureRandom secure = new SecureRandom();
     	//ArrayList<State> list = new ArrayList<State>();
 //		List<State> refList = new ArrayList<State>(this.listStateReference); 
     	iffatherselection = new FactoryFatherSelection();
     	FatherSelection selection = iffatherselection.createSelectFather(selectionType);
     	List<State> fathers = selection.selection(this.listStateReference, truncation);
-    	int pos1 = (int)(Math.random() * fathers.size());
+    	int pos1 = (int)(secure.nextDouble() * fathers.size());
     	State candidate = (State) Strategy.getStrategy().getProblem().getState().getCopy();
     	candidate.setCode(new ArrayList<Object>(fathers.get(pos1).getCode()));
     	candidate.setEvaluation(fathers.get(pos1).getEvaluation());

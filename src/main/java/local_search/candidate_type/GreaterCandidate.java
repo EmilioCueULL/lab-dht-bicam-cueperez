@@ -10,6 +10,8 @@ import java.util.List;
 
 import problem.definition.State;
 
+import java.security.SecureRandom;
+
 
 
 
@@ -17,6 +19,7 @@ public class GreaterCandidate extends SearchCandidate {
 	
 	@Override
 	public State stateSearch(List<State> listNeighborhood) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		SecureRandom secure = new SecureRandom();
 		State stateGreater = null;
 		if(listNeighborhood.size() > 1){
 			double counter = 0;
@@ -30,7 +33,7 @@ public class GreaterCandidate extends SearchCandidate {
 				counter = 0;
 			}
 			if(stateGreater == null){
-				int pos = (int)(Math.random() * (double)(listNeighborhood.size() - 1));
+				int pos = (int)(secure.nextDouble() * (double)(listNeighborhood.size() - 1));
 				stateGreater = listNeighborhood.get(pos);
 			}
 		}

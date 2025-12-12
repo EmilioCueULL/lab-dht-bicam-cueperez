@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
+import metaheuristics.generators.GeneratorType;
+
 class StateTest {
 
     @Test
@@ -32,6 +34,9 @@ class StateTest {
         
         state.setNumber(5);
         assertEquals(5, state.getNumber());
+        
+        state.setTypeGenerator(GeneratorType.HillClimbing);
+        assertEquals(GeneratorType.HillClimbing, state.getTypeGenerator());
     }
 
     @Test
