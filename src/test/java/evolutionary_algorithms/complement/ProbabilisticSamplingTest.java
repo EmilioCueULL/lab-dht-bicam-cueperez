@@ -1,70 +1,82 @@
 package evolutionary_algorithms.complement;
 
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+
+import metaheurictics.strategy.Strategy;
+import metaheuristics.generators.GeneratorType;
 import problem.definition.Codification;
 import problem.definition.Problem;
 import problem.definition.State;
-import metaheurictics.strategy.Strategy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+public class ProbabilisticSamplingTest {
 
-import static org.junit.jupiter.api.Assertions.*;
+    static class TestCodification extends Codification {
 
-class ProbabilisticSamplingTest {
+        @Override
+        public boolean validState(State state) {
+            return true;
+        }
 
-    private ProbabilisticSampling sampling;
+        @Override
+        public Object getVariableAleatoryValue(int key) {
+            return 0;
+        }
 
-    @BeforeEach
-    void setUp() {
-        sampling = new ProbabilisticSampling();
-        
-        Problem mockProblem = new Problem();
-        mockProblem.setPossibleValue(3); // Values 0, 1, 2
-        
-        Codification mockCodification = new Codification() {
-            @Override
-            public boolean validState(State state) { return true; }
-            @Override
-            public Object getVariableAleatoryValue(int key) { return 0; }
-            @Override
-            public int getAleatoryKey() { return 0; }
-            @Override
-            public int getVariableCount() { return 5; }
-        };
-        
-        mockProblem.setCodification(mockCodification);
-        Strategy.getStrategy().setProblem(mockProblem);
+        @Override
+        public int getAleatoryKey() {
+            return 0;
+        }
+
+        @Override
+        public int getVariableCount() {
+            return 1;
+        }
+
     }
 
     @Test
-    void testSampling() {
-        // Create fathers
+    public void listStateInitializesCorrectlyAndSamplingProducesExpectedSizes() {
+        Strategy.destroyExecute();
+        Strategy strat = Strategy.getStrategy();
+        strat.setCountCurrent(7);
+
+        Problem p = new Problem();
+        p.setPossibleValue(3);
+        p.setCodification(new TestCodification());
+        strat.setProblem(p);
+
+        ProbabilisticSampling ps = new ProbabilisticSampling();
+
         List<State> fathers = new ArrayList<>();
-        // Father 1: [0, 0, 0, 0, 0]
-        fathers.add(new State(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0))));
-        // Father 2: [1, 1, 1, 1, 1]
-        fathers.add(new State(new ArrayList<>(Arrays.asList(1, 1, 1, 1, 1))));
-        // Father 3: [2, 2, 2, 2, 2]
-        fathers.add(new State(new ArrayList<>(Arrays.asList(2, 2, 2, 2, 2))));
-        
-        int countInd = 10;
-        List<State> result = sampling.sampling(fathers, countInd);
-        
-        assertNotNull(result);
-        assertEquals(countInd, result.size());
-        
-        for (State s : result) {
-            assertEquals(5, s.getCode().size());
-            for (Object gene : s.getCode()) {
-                assertTrue(gene instanceof Integer);
-                int val = (Integer) gene;
-                // Values should be mostly 0, 1, 2. 
-                // Fallback logic might produce other values if something goes wrong, but here it should be fine.
-                assertTrue(val >= 0); 
-            }
+        // Create 2 fathers each with code size 2
+        for (int i = 0; i < 2; i++) {
+            State s = new State();
+            ArrayList<Object> code = new ArrayList<>();
+            code.add(0);
+            code.add(1);
+            s.setCode(code);
+            fathers.add(s);
+        }
+
+        // listState
+        List<State> lst = ps.listState(5);
+        assertEquals(5, lst.size());
+        for (State st : lst) {
+            assertEquals(7, st.getNumber());
+            assertEquals(GeneratorType.DistributionEstimationAlgorithm, st.getTypeGenerator());
+        }
+
+        // sampling should produce countInd states each with code size equal to fathers.get(0).getCode().size()
+        List<State> out = ps.sampling(fathers, 4);
+        assertEquals(4, out.size());
+        for (State st : out) {
+            assertEquals(fathers.get(0).getCode().size(), st.getCode().size());
         }
     }
 }
+ 
