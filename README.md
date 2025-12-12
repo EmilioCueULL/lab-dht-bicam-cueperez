@@ -1,0 +1,5 @@
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=EmilioCueULL_lab-dht-bicam-cueperez)](https://sonarcloud.io/summary/new_code?id=EmilioCueULL_lab-dht-bicam-cueperez)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=EmilioCueULL_lab-dht-bicam-cueperez&metric=bugs)](https://sonarcloud.io/summary/new_code?id=EmilioCueULL_lab-dht-bicam-cueperez)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=EmilioCueULL_lab-dht-bicam-cueperez&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=EmilioCueULL_lab-dht-bicam-cueperez)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EmilioCueULL_lab-dht-bicam-cueperez&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EmilioCueULL_lab-dht-bicam-cueperez)
+[![CI Pipeline BICIAM](https://github.com/EmilioCueULL/lab-dht-bicam-cueperez/actions/workflows/ci-pipeline.yml/badge.svg)](https://github.com/EmilioCueULL/lab-dht-bicam-cueperez/actions/workflows/ci-pipeline.yml)
